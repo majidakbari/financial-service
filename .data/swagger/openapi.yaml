@@ -1,0 +1,200 @@
+openapi: 3.0.0
+info:
+  title: Financial service API documentation
+  contact:
+    email: majidakbariiii@gmail.com
+  license:
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Local Server
+paths:
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: "Login endpoint"
+      description: "Returns authentication token (JWT)"
+      operationId: "auth-login"
+      security: []
+      requestBody:
+        $ref: "#/components/requestBodies/LoginRequest"
+      responses:
+        200:
+          description: "Success"
+        400:
+          description: "Unprocessable Entity"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    readOnly: true
+                    example: "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                  title:
+                    type: string
+                    readOnly: true
+                    example: "One or more validation errors occurred."
+                  status:
+                    type: integer
+                    readOnly: true
+                    example: 400
+                  traceId:
+                    type: string
+                    readOnly: true
+                    format: uuid
+                    example: "|b569c1f9-40d59a2b6fc21ddd."
+                  errors:
+                    type: object
+                    properties:
+                      email:
+                        type: array
+                        items:
+                          type: string
+                          example:  "One or more than one validation error"
+                      password:
+                        type: array
+                        items:
+                          type: string
+                          example:  "One or more than one validation error"
+        401:
+          $ref: "#/components/responses/401"
+        415:
+          $ref: "#/components/responses/415"
+      deprecated: false
+components:
+  securitySchemes:
+    AccessToken:
+      type: http
+      bearerFormat: JWT
+      scheme: bearer
+  requestBodies:
+    LoginRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginRequest'
+  responses:
+    201:
+      description: 'The object has been created successfully'
+    200:
+      description: 'Ok'
+    204:
+      description: 'No content'
+    202:
+      description: 'The request has been accepted'
+    401:
+      description: 'Unauthorized'
+    403:
+      description: 'Forbidden - Access denied'
+    404:
+      description: 'Not found'
+    422:
+      description: 'Unprocessable entity'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                readOnly: true
+                example: "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+              title:
+                type: string
+                readOnly: true
+                example: "One or more validation errors occurred."
+              status:
+                type: integer
+                readOnly: true
+                example: 400
+              traceId:
+                type: string
+                readOnly: true
+                format: uuid
+                example: "|b569c1f9-40d59a2b6fc21ddd."
+              errors:
+                type: object
+                properties:
+                  somePropertyName:
+                    type: array
+                    items:
+                      type: string
+                      example:  "One or more than one validation error"
+    415:
+      description: 'Unsupported media type'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                readOnly: true
+                example: "https://tools.ietf.org/html/rfc7231#section-6.5.13"
+              title:
+                type: string
+                readOnly: true
+                example: "Unsupported Media Type"
+              status:
+                type: integer
+                readOnly: true
+                example: 415
+              traceId:
+                type: string
+                readOnly: true
+                format: uuid
+                example: "|b569c1f9-40d59a2b6fc21ddd."
+  schemas:
+    User:
+      description: User model
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: "c430dcf9-024d-4595-aabe-dac6042eaea2"
+        firstname:
+          type: string
+          example: "John"
+        lastname:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          format: email
+          example: "john@doe.com"
+        phoneNumber:
+          type: string
+          example: "+3721234567"
+        createdAt:
+          type: string
+          format: dateTime
+          example: "2020-09-02T08:50:39.6666667"
+          readOnly: true
+        updatedAt:
+          type: string
+          format: dateTime
+          example: "2020-09-02T08:50:39.6666667"
+          readOnly: true
+    LoginRequest:
+      description: "Login request body"
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: foo@bar.com
+        password:
+          type: string
+          format: password
+          minLength: 8

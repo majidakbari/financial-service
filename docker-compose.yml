@@ -1,0 +1,58 @@
+version: '3.7'
+
+services:
+
+  ## --------------------------------------------------
+  ## | Web Server - Php7.3.22-apache
+  ## --------------------------------------------------
+  financial-core:
+    build:
+      context: .docker/app
+      dockerfile: Dockerfile
+      args:
+        - WWW_DATA_USER_ID=${WWW_DATA_USER_ID}
+    container_name: financial-core
+    volumes:
+      - ./app:/var/www/
+      - ./.docker-compose/backend/config/php.ini:/usr/local/etc/php/php.ini
+      - ./.data/app/log/webserver:/var/log/apache2
+    environment:
+      - WWW_DATA_USER_ID=${WWW_DATA_USER_ID}
+      - EXCLUDE_PORTS=443
+    ports:
+      - "${BACKEND_PORT}:80"
+    restart: always
+    depends_on:
+      - finanical-db
+    env_file:
+      - .env
+
+  ## --------------------------------------------------
+  ## | Database - MySQL 5.7.31
+  ## --------------------------------------------------
+  finanical-db:
+    image: mysql:5.7.31
+    container_name: finanical-db
+    volumes:
+      - ./.data/db:/var/lib/mysql
+    ports:
+      - "${DB_HOST_PORT}:3306"
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+
+  ## --------------------------------------------------
+  ## | Swagger - API Documentation
+  ## --------------------------------------------------
+  finanical-swagger:
+    image: swaggerapi/swagger-ui
+    container_name: finanical-swagger
+    ports:
+      - "${SWAGGER_PORT}:8080"
+    volumes:
+      - ./.data/swagger/openapi.yaml:/openapi.yaml
+    environment:
+      SWAGGER_JSON: /openapi.yaml

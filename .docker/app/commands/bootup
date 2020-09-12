@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ `whoami` != 'root' ]; then
+        echo "Please run as root"
+        exit 1
+fi
+
+(cd /var/www && chmod -Rf +w storage/logs && chmod -Rf +w bootstrap/cache)
+
+printf "\033[0;32m > composer install...\n"
+(cd /var/www/ && composer install --ignore-platform-reqs)
+
+printf "\033[0;32m > Migrating the database...\n"
+(cd /var/www/ && php artisan migrate --force --seed)
