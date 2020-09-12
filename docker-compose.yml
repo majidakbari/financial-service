@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   ## --------------------------------------------------
-  ## | Web Server - Php7.3.22-apache
+  ## | Web Server - Php7.4-apache
   ## --------------------------------------------------
   financial-core:
     build:

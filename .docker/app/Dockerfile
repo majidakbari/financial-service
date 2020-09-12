@@ -1,4 +1,4 @@
-FROM php:7.3.22-apache
+FROM php:7.4.0-apache
 
 LABEL maintainer="Majid Akbari <majidakbariiii@gmail.com"
 
@@ -11,6 +11,7 @@ RUN apt-get update -y && \
         libzip-dev \
         zlib1g-dev \
         libssl-dev \
+        libonig-dev \
         unzip && \
         docker-php-ext-install -j$(nproc) zip \
         mbstring \
