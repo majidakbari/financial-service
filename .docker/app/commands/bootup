@@ -11,4 +11,4 @@ printf "\033[0;32m > composer install...\n"
 (cd /var/www/ && composer install --ignore-platform-reqs)
 
 printf "\033[0;32m > Migrating the database...\n"
-(cd /var/www/ && php artisan migrate --force --seed)
+(cd /var/www/ && php artisan migrate --seed)
