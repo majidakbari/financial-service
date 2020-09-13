@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
+use App\Entities\User;
+use App\Entities\Wallet;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
     public function run()
     {
-        // User::factory(10)->create();
+        if (User::query()->where('email', config('logic.company_email'))->doesntExist()) {
+            Wallet::factory()->company()->create();
+        }
+        Wallet::factory(10)->create();
     }
 }

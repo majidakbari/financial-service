@@ -5,6 +5,7 @@ namespace App\Entities;
 use Carbon\Carbon;
 use InvalidArgumentException;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Transaction
@@ -21,6 +22,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Transaction extends Model
 {
+    use HasFactory;
+
     public const TYPE_COMMISSION_CODE = 1;
     public const TYPE_COMMISSION_DESCRIPTION = 'commission';
     public const TYPE_TRANSFER_CODE = 2;

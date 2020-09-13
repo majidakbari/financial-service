@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Wallet
@@ -19,4 +20,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Wallet extends Model
 {
+    use HasFactory;
 }

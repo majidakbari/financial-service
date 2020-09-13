@@ -11,7 +11,12 @@ class StoreTransactionRequest extends FormRequest
     {
         return [
             'source_wallet_id' => ['required', 'int', Rule::exists('wallets', 'id')->where('is_active', true)],
-            'destination_wallet_id' => ['required', 'int', Rule::exists('wallets', 'id')->where('is_active', true)],
+            'destination_wallet_id' => [
+                'required',
+                'int',
+                Rule::exists('wallets', 'id')->where('is_active', true),
+                Rule::notIn($this->get('source_wallet_id'))
+            ],
             'amount' => ['required', 'numeric', 'min:0.1', 'regex:/^\d+(\.\d{1,2})?$/'],
             'description' => ['nullable', 'string', 'max:65535']
         ];
