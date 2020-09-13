@@ -10,11 +10,10 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 
 abstract class BaseRepository implements EloquentRepositoryInterface
 {
-    abstract protected function model();
-
+    private Container $container;
     protected array $fillable = [];
 
-    private Container $container;
+    abstract protected function model(): string;
 
     public function __construct(Container $container)
     {

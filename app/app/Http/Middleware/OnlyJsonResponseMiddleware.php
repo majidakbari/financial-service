@@ -8,9 +8,9 @@ use App\Exceptions\HttpException\InvalidAcceptHeaderException;
 
 class OnlyJsonResponseMiddleware
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next = null)
     {
-        if (!in_array($request->header('accept'), ['*/*', 'application/json'])) {
+        if (!in_array($request->header('accept'), ['*/*', 'application/json', null])) {
             throw new InvalidAcceptHeaderException();
         }
 
