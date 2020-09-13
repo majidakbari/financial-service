@@ -84,7 +84,7 @@ This project includes three docker containers based on `php-apache`, `MySQL` and
 It is under development, So the source code is mounted from the host to containers. On production environment you should remove these volumes.
 
 `app`
-php:7.4.0-apache
+php:7.4.10-apache
 
 `db`
 MySQL 5.7.31

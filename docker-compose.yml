@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   ## --------------------------------------------------
-  ## | Web Server - Php7.4-apache
+  ## | Web Server - php:7.4.10-apache
   ## --------------------------------------------------
   financial-core:
     build:
@@ -13,7 +13,7 @@ services:
         - WWW_DATA_USER_ID=${WWW_DATA_USER_ID}
     container_name: financial-core
     volumes:
-      - ./app:/var/www/
+      - ./app/:/var/www/
       - ./.docker/app/config/php.ini:/usr/local/etc/php/php.ini
       - ./.data/app/log/webserver:/var/log/apache2
     environment:
