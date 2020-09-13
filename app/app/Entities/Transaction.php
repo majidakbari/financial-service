@@ -27,7 +27,7 @@ class Transaction extends Model
     public const TYPE_COMMISSION_CODE = 1;
     public const TYPE_COMMISSION_DESCRIPTION = 'commission';
     public const TYPE_TRANSFER_CODE = 2;
-    public const TYPE_TRANSFER_DESCRIPTION  = 'Transfer';
+    public const TYPE_TRANSFER_DESCRIPTION  = 'transfer';
 
     protected $appends = [
         'type_description'

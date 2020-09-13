@@ -8,193 +8,212 @@ info:
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
   version: 1.0.0
 servers:
-  - url: http://localhost:5000
+  - url: http://localhost:9090
     description: Local Server
 paths:
-  /api/auth/login:
+  /api/transaction:
     post:
       tags:
         - Auth
-      summary: "Login endpoint"
-      description: "Returns authentication token (JWT)"
-      operationId: "auth-login"
+      summary: "Store transaction endpoint"
+      description: "This endpoint stores two transactions; one for the original transaction and another one for the commission. Finally it returns both of them"
+      operationId: "transaction-store"
       security: []
       requestBody:
-        $ref: "#/components/requestBodies/LoginRequest"
+        $ref: "#/components/requestBodies/StoreTransactionRequest"
       responses:
         200:
           description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
         400:
-          description: "Unprocessable Entity"
+          description: "Insufficient credit"
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  type:
+                  error:
                     type: string
-                    readOnly: true
-                    example: "https://tools.ietf.org/html/rfc7231#section-6.5.1"
-                  title:
+                    example: "InsufficientCreditException"
+                  message:
                     type: string
-                    readOnly: true
-                    example: "One or more validation errors occurred."
-                  status:
-                    type: integer
-                    readOnly: true
-                    example: 400
-                  traceId:
+                    example: "There is not enough balance in the wallet."
+        406:
+          description: "Invalid accept header"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
                     type: string
-                    readOnly: true
-                    format: uuid
-                    example: "|b569c1f9-40d59a2b6fc21ddd."
-                  errors:
+                    example: "InvalidAcceptHeaderException"
+                  message:
+                    type: string
+                    example: "This application only supports json response."
+        422:
+          description: "Unprocessable entity"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "ValidationException"
+                  message:
                     type: object
                     properties:
-                      email:
+                      source_wallet_id:
                         type: array
                         items:
                           type: string
-                          example:  "One or more than one validation error"
-                      password:
+                          example: "One or more than one validation error"
+                      destination_wallet_id:
                         type: array
                         items:
                           type: string
-                          example:  "One or more than one validation error"
-        401:
-          $ref: "#/components/responses/401"
-        415:
-          $ref: "#/components/responses/415"
+                          example: "One or more than one validation error"
+                      amount:
+                        type: array
+                        items:
+                          type: string
+                          example: "One or more than one validation error"
+                      description:
+                        type: array
+                        items:
+                          type: string
+                          example: "One or more than one validation error"
       deprecated: false
 components:
-  securitySchemes:
-    AccessToken:
-      type: http
-      bearerFormat: JWT
-      scheme: bearer
   requestBodies:
-    LoginRequest:
+    StoreTransactionRequest:
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/LoginRequest'
-  responses:
-    201:
-      description: 'The object has been created successfully'
-    200:
-      description: 'Ok'
-    204:
-      description: 'No content'
-    202:
-      description: 'The request has been accepted'
-    401:
-      description: 'Unauthorized'
-    403:
-      description: 'Forbidden - Access denied'
-    404:
-      description: 'Not found'
-    422:
-      description: 'Unprocessable entity'
-      content:
-        application/json:
-          schema:
+            required:
+              - source_wallet_id
+              - destination_wallet_id
+              - amount
             type: object
             properties:
-              type:
+              source_wallet_id:
+                type: number
+                format: int32
+                example: 2
+              destination_wallet_id:
+                type: number
+                format: int32
+                example: 3
+              amount:
+                type: number
+                format: float
+                example: "10.50"
+              description:
                 type: string
-                readOnly: true
-                example: "https://tools.ietf.org/html/rfc7231#section-6.5.1"
-              title:
-                type: string
-                readOnly: true
-                example: "One or more validation errors occurred."
-              status:
-                type: integer
-                readOnly: true
-                example: 400
-              traceId:
-                type: string
-                readOnly: true
-                format: uuid
-                example: "|b569c1f9-40d59a2b6fc21ddd."
-              errors:
-                type: object
-                properties:
-                  somePropertyName:
-                    type: array
-                    items:
-                      type: string
-                      example:  "One or more than one validation error"
-    415:
-      description: 'Unsupported media type'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              type:
-                type: string
-                readOnly: true
-                example: "https://tools.ietf.org/html/rfc7231#section-6.5.13"
-              title:
-                type: string
-                readOnly: true
-                example: "Unsupported Media Type"
-              status:
-                type: integer
-                readOnly: true
-                example: 415
-              traceId:
-                type: string
-                readOnly: true
-                format: uuid
-                example: "|b569c1f9-40d59a2b6fc21ddd."
+                example: "Lorem Ipsum"
   schemas:
     User:
       description: User model
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
+          format: int32
           readOnly: true
-          example: "c430dcf9-024d-4595-aabe-dac6042eaea2"
-        firstname:
+          example: 1
+        name:
           type: string
-          example: "John"
-        lastname:
-          type: string
-          example: "Doe"
+          example: "John Doe"
         email:
           type: string
           format: email
           example: "john@doe.com"
-        phoneNumber:
-          type: string
-          example: "+3721234567"
         createdAt:
           type: string
           format: dateTime
-          example: "2020-09-02T08:50:39.6666667"
+          example: "2020-09-14 00:00:00"
           readOnly: true
         updatedAt:
           type: string
           format: dateTime
-          example: "2020-09-02T08:50:39.6666667"
+          example: "2020-09-14 00:00:00"
           readOnly: true
-    LoginRequest:
-      description: "Login request body"
+    Wallet:
+      description: Wallet model
       type: object
-      required:
-        - email
-        - password
       properties:
-        email:
+        id:
+          type: integer
+          format: int32
+          readOnly: true
+          example: 1
+        name:
           type: string
-          format: email
-          example: foo@bar.com
-        password:
+          example: "Primary"
+        balance:
+          type: number
+          format: float
+          example: 1000.50
+        is_active:
+          type: boolean
+          example: true
+        user_id:
+          type: number
+          format: int32
+          example: 1
+        createdAt:
           type: string
-          format: password
-          minLength: 8
+          format: dateTime
+          example: "2020-09-14 00:00:00"
+          readOnly: true
+        updatedAt:
+          type: string
+          format: dateTime
+          example: "2020-09-14 00:00:00"
+          readOnly: true
+    Transaction:
+      description: Transaction model
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          readOnly: true
+          example: 1
+        source_wallet_id:
+          type: number
+          format: int32
+          example: 2
+        destination_wallet_id:
+          type: number
+          format: int32
+          example: 3
+        amount:
+          type: number
+          format: float
+          example: "10.50"
+        type_description:
+          type: string
+          enum:
+            - "commission"
+            - "transfer"
+        description:
+          type: string
+          example: "Lorem Ipsum..."
+        createdAt:
+          type: string
+          format: dateTime
+          example: "2020-09-14 00:00:00"
+          readOnly: true
+        updatedAt:
+          type: string
+          format: dateTime
+          example: "2020-09-14 00:00:00"
+          readOnly: true
