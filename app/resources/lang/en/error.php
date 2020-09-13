@@ -13,4 +13,5 @@ return [
     'AuthorizationException' => 'The user access is forbidden.',
     'AccessDeniedException' => 'The user access is forbidden.',
     'BadRequestHttpException' => 'Bad request, please correct your request data.',
+    'InsufficientCreditException' => 'There is not enough balance in the wallet'
 ];

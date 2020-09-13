@@ -4,8 +4,8 @@ namespace App\Http\Services\Transaction;
 
 class CalculateCommissionService
 {
-    public function __invoke()
+    public function __invoke(float $amount): float
     {
-        // TODO: Implement __invoke() method.
+        return number_format($amount * (float) config('logic.commission_rate')/100, 2);
     }
 }

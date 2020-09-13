@@ -10,7 +10,12 @@ class StoreTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'source_wallet_id' => ['required', 'int', Rule::exists('wallets', 'id')->where('is_active', true)],
+            'source_wallet_id' => [
+                'required',
+                'int',
+                Rule::exists('wallets', 'id')->where('is_active', true),
+                Rule::notIn(config('logic.company_wallet_id'))
+            ],
             'destination_wallet_id' => [
                 'required',
                 'int',

@@ -29,7 +29,6 @@ abstract class BaseRepository implements EloquentRepositoryInterface
         return $object->fillable($fillable)->fill($data);
     }
 
-
     /**
      * @param array $data
      * @param array $fillable
