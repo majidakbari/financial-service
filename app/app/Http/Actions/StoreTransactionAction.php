@@ -60,7 +60,6 @@ class StoreTransactionAction
             $commission,
             Transaction::TYPE_COMMISSION_CODE,
         );
-
         ($this->changeWalletBalanceService)($companyWalletId, $commission);
 
 

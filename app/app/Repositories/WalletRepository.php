@@ -3,8 +3,8 @@
 namespace App\Repositories;
 
 use App\Entities\Wallet;
-use App\Repositories\Common\BaseRepository;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\Common\BaseRepository;
 
 class WalletRepository extends BaseRepository
 {
