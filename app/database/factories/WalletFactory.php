@@ -39,4 +39,11 @@ class WalletFactory extends Factory
             'user_id' => User::factory()->company()
         ]);
     }
+
+    public function inactive()
+    {
+        return $this->state([
+            'is_active' => false,
+        ]);
+    }
 }
