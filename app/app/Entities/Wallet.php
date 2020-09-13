@@ -3,18 +3,21 @@
 namespace App\Entities;
 
 use Carbon\Carbon;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class User
+ * Class Wallet
  * @property int id
  * @property string name
- * @property string email
+ * @property float balance
+ * @property bool is_active
+ * @property int user_id
  * @property Carbon created_at
  * @property Carbon updated_at
  *
  * @package App\Entities
  */
-class User extends Authenticatable
+class Wallet extends Model
 {
+
 }
